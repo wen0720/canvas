@@ -9,7 +9,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
+        publicPath: ''
     },
     plugins: [
         new cleanWebpackPlugin(),  // 清除掉 /dist 檔案的資料，在每次包版的時候
