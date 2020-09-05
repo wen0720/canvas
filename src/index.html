@@ -30,6 +30,7 @@
 
         .clip-animation-2 {
             clip-path: url(#myClip);
+            -webkit-clip-path: url(#myClip);
         }
 
         #myClip circle {
@@ -61,7 +62,7 @@
     <canvas id="mycanvas"></canvas>
 
     <div class="test clip-animation-2">a;sfja;efij;ahfe laheflhaefleajhf lahflajkh dlfhaldfhljdaHfljHdalfjhaDlfjhalf aldfhkfdgldfjgldjfblf</div>
-    <svg width="0" height="0">
+    <svg width="200" height="200">
         <defs>
             <clipPath id="myClip">
                 <circle class="js-circle" cx="50" cy="50" r="40"/>
@@ -71,11 +72,11 @@
         </defs>
     </svg>
     <script>
-        setTimeout(() => {
-            document.querySelectorAll('.js-circle').forEach(el => {
-                el.classList.add('circleClip1')
-            })
-        }, 1000)
+        // setTimeout(() => {
+        //     document.querySelectorAll('.js-circle').forEach(el => {
+        //         el.classList.add('circleClip1')
+        //     })
+        // }, 1000)
     </script>
 </body>
 </html>
