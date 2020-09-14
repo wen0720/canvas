@@ -45,7 +45,7 @@ class Ball {
       if (this.goDestoryBall) {
         this.ctx.beginPath()
         this.ctx.arc(this.p.x, this.p.y, this.r, 0, Math.PI*2)
-        if (this.r >= this.limitR*2) {
+        if (this.r >= this.limitR*6) {
           this.ctx.fillStyle = 'rgba(0,0,0,0)'
         } else {
           const opacity = (0.6 - (this.r/(this.limitR*2)) * 0.6).toFixed(2)
