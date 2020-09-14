@@ -1,5 +1,56 @@
 import * as dat from 'dat.gui';
 
+const Vector = function (x, y) {
+  this.x = x
+  this.y = y
+}
+
+Vector.prototype.add = function (v) {
+  return new Vector(this.x + v.x, this.y+v.y)
+}
+
+Vector.prototype.move = function (v) {
+  this.x = v.x
+  this.y = v.y
+  return this
+}
+
+Vector.prototype.sub = function (v) {
+  return new Vector(this.x - v.x, this.y - v.y)
+}
+
+Vector.prototype.toString = function (v) {
+  return `(${this.x}, ${this.y})`
+}
+
+// s 為純量的意思
+Vector.prototype.mul = function (s) {
+  return new Vector(this.x*s, this.y*s)
+}
+
+// 長度
+Vector.prototype.length = function () {
+  return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
+}
+
+Vector.prototype.set = function (x, y) {
+  this.x = x
+  this.y = y
+  return this
+}
+
+Vector.prototype.equal = function (v) {
+  return (this.x === v.x) && (this.y === v.y)
+}
+
+Vector.prototype.clone = function () {
+  return new Vector(this.x, this.y)
+}
+
+Vector.prototype.angle = function () {
+  return Math.atan2(this.y, this.x)
+}
+
 const canvas = document.getElementById('myCanvas')
 const ctx = canvas.getContext('2d')
 
@@ -44,21 +95,14 @@ gui.add(controls, 'step') // 在 gui 項會變成一個可以按的按鈕，按�
 gui.add(controls, 'FPS', 1, 120).listen()
 
 const Ball = function() {
-  // 位置
-  this.p = {
-    x: ww/2,
-    y: wh/2
-  }
-  // 速度
-  this.v = {
-    x: 5,
-    y: 0
-  }
-  // 加速度
-  this.a = {
-    x: 0,
-    y: 0.6
-  }
+  // 位置向量
+  this.p = new Vector(ww/2, wh/2)
+
+  // 速度向量
+  this.v = new Vector(5, 0)
+
+  // 加速度向量
+  this.a = new Vector(0, 0.6)
   // 半徑
   this.r = 50
   // 是否拖曳中
@@ -80,15 +124,12 @@ Ball.prototype.update = function() {
   if (this.dragging) {
     return
   }
-  this.p.x += this.v.x
-  this.p.y += this.v.y
+  this.p = this.p.add(this.v)
 
-  this.v.x += this.a.x
-  this.v.y += this.a.y
+  this.v = this.v.add(this.a)
 
   // 讓球越彈越小（原理：讓變量越來越小）
-  this.v.x *= controls.fade
-  this.v.y *= controls.fade
+  this.v = this.v.mul(controls.fade)
 
   this.checkBoundary()
 
@@ -191,37 +232,45 @@ function getDistance(point1, point2) {
 }
 
 // 拖曳相關
-let mosPos = { x: 0, y: 0 }
+// let mosPos = { x: 0, y: 0 }
+let mosPos = null
 canvas.addEventListener('mousedown', function (e) {
-  mosPos = { x: e.x, y: e.y }
-  let dis = getDistance(mosPos, ball.p)
+  // mosPos = { x: e.x, y: e.y }
+  mosPos = new Vector(e.x, e.y)
+  let dis = mosPos.sub(ball.p).length()
+  console.log(dis)
   if (dis < ball.r) {
     ball.dragging = true
   }
 })
 
 canvas.addEventListener('mousemove', function (e) {
-  let nowPos = { x: e.x, y: e.y }
+  // let nowPos = { x: e.x, y: e.y }
+  let nowPos = new Vector(e.x, e.y)
   if (ball.dragging) {
     // 滑鼠與上一次的位置的變化量
-    const dx = nowPos.x - mosPos.x
-    const dy = nowPos.y - mosPos.y
+    // const dx = nowPos.x - mosPos.x
+    // const dy = nowPos.y - mosPos.y
+    const dVector = nowPos.sub(mosPos)
 
-    ball.p.x += dx
-    ball.p.y += dy
+    ball.p = ball.p.add(dVector)
+    // ball.p.x += dx
+    // ball.p.y += dy
 
     // console.log(ball.p.x, dx)
     // console.log(ball.p.y, dy)
 
-    ball.v.x = dx // 做出拋出的速度（速度就是位置的變化量，所以這樣做）
-    ball.v.y = dy // 做出拋出的速度（速度就是位置的變化量，所以這樣做）
+    // ball.v.x = dx // 做出拋出的速度（速度就是位置的變化量，所以這樣做）
+    // ball.v.y = dy // 做出拋出的速度（速度就是位置的變化量，所以這樣做）
+
+    ball.v = dVector.clone()
 
     // 更新滑鼠的位置到目前時刻
     mosPos = nowPos
   }
 
   let dis = getDistance(nowPos, ball.p)
-  console.log(dis)
+
   if (dis < ball.r) {
     canvas.style.cursor = 'move'
   } else {
