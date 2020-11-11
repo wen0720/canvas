@@ -12,6 +12,10 @@ module.exports = {
         canvas5: './src/canvas-5.js',
         canvas6: './src/canvas-6.js',
         canvas7: './src/canvas-7.js',
+        canvas8: './src/canvas-8.js',
+        canvas9: './src/canvas-9.js',
+        canvas10: './src/canvas-10.js',
+        canvas11: './src/canvas-11.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -61,6 +65,30 @@ module.exports = {
             filename: 'canvas-7.html',
             template: 'src/canvas-7.html',
             chunks: ['canvas7']
-        })
+        }),
+        new HtmlWebpackPlugin({
+            title: '極坐標',
+            filename: 'canvas-8.html',
+            template: 'src/canvas-8.html',
+            chunks: ['canvas8']
+        }),
+        new HtmlWebpackPlugin({
+            title: '三角函數入門',
+            filename: 'canvas-9.html',
+            template: 'src/canvas-9.html',
+            chunks: ['canvas9']
+        }),
+        new HtmlWebpackPlugin({
+            title: '畫圓弧曲線',
+            filename: 'canvas-10.html',
+            template: 'src/canvas-10.html',
+            chunks: ['canvas10']
+        }),
+        new HtmlWebpackPlugin({
+            title: '波形',
+            filename: 'canvas-11.html',
+            template: 'src/canvas-11.html',
+            chunks: ['canvas11']
+        }),
     ]
 }
